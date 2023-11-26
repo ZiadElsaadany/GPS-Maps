@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const GPS());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GPS extends StatelessWidget {
+  const GPS({super.key});
 
   // This widget is the root of your application.
   @override
