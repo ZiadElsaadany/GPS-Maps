@@ -50,3 +50,20 @@ if(!serviceEnabled) {
 return serviceEnabled ;
 }
 ```
+## Get Location In Case Location And Gps Opened 
+```dart 
+// get location
+  LocationData ? locationData ;
+getUserLocation( )async {
+bool granted=   await isPermissionGranted();
+if(!granted) {
+  // user denied permission
+  return ;
+}
+ bool gpsEnabled =  await isServiceEnabled();
+if(!gpsEnabled){
+  // user didn't allow to open GPS
+  return;
+}
+locationData =     await location.getLocation();
+```
