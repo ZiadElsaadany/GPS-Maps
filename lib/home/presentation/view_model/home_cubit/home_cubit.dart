@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gps/home/presentation/view_model/home_cubit/home_states.dart';
@@ -36,7 +38,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
 // get location
   LocationData ? locationData ;
-
+ StreamSubscription<LocationData>?  locationListener ;
   getUserLocation( )async {
     bool granted=   await isPermissionGranted();
     if(!granted) {
@@ -55,10 +57,26 @@ class HomeCubit extends Cubit<HomeStates> {
     if (kDebugMode) {
       print(locationData?.longitude.toString());
     }
+    location.changeSettings(
+      accuracy: LocationAccuracy.high,
+      interval:1000,
+      distanceFilter: 10
+    );
+  locationListener =  location.onLocationChanged.listen((newestLocation) {
+      locationData =    newestLocation;
+
+    });
+
+  // s
 
 
 
 
+  }
+
+  // dispose
+  stopLocationListener( ) {
+    locationListener?.cancel();
   }
 
 }
