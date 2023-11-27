@@ -67,3 +67,19 @@ if(!gpsEnabled){
 }
 locationData =     await location.getLocation();
 ```
+## Listener Of Location
+```dart 
+ StreamSubscription<LocationData>?  locationListener ;
+ locationListener =  location.onLocationChanged.listen((newestLocation) {
+      locationData =    newestLocation;
+    });
+```
+## Cancle Listener 
+```dart 
+ stopLocationListener( ) {
+    locationListener?.cancel();
+  }
+```
+
+# Google Maps With Flutter
+package : **https://pub.dev/packages/google_maps_flutter**
