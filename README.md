@@ -7,6 +7,7 @@ location Packcage: [https://pub.dev/packages/location]
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
+#### Ios
 ```swift
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>this app access location to get closest cafes near you</string>
