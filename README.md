@@ -1,7 +1,7 @@
 # Maps
 
 # Location
-location Packcage: [https://pub.dev/packages/location]
+location Package: [https://pub.dev/packages/location]
 ## Config
 #### AndroidMainfest.xml
 ```java 
