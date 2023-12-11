@@ -18,21 +18,8 @@ void main() {
       child: GPS()));
 }
 
-class GPS extends StatefulWidget {
+class GPS extends StatelessWidget {
    GPS({super.key});
-
-  @override
-  State<GPS> createState() => _GPSState();
-}
-
-class _GPSState extends State<GPS> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    BlocProvider.of<HomeCubit>(context).getUserLocation();
-  }
 
   // This widget is the root of your application.
   @override
@@ -64,6 +51,4 @@ class _GPSState extends State<GPS> {
       } ,
     );
   }
-
-
 }

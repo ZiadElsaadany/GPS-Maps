@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gps/home/presentation/view_model/home_cubit/home_states.dart';
 import 'package:location/location.dart';
 
@@ -64,6 +65,7 @@ class HomeCubit extends Cubit<HomeStates> {
     );
   locationListener =  location.onLocationChanged.listen((newestLocation) {
       locationData =    newestLocation;
+      updateUserMarker(  );
 
     });
 
@@ -74,9 +76,96 @@ class HomeCubit extends Cubit<HomeStates> {
 
   }
 
+  double defaultLat  = 30.0364361;
+  double defaultLong  = 31.2030135;
+
+  var userMarker;
+
+ void updateUserMarker(
+
+     ) {
+ userMarker =
+   Marker(markerId: const MarkerId("user_location"),
+   position: LatLng(
+   defaultLat,
+   defaultLong
+   // BlocProvider.of<HomeCubit>(context).locationData?.latitude??defaultLat,
+   // BlocProvider.of<HomeCubit>(context).locationData?.longitude??defaultLong
+   )
+   );
+ emit(UpdateUserMarkerState());
+ }
+
+
+ late CameraPosition kLake ;
+ kLakeInitialized( ) {
+   kLake = CameraPosition(
+       bearing: 192.8334901395799,
+       target: LatLng(
+           defaultLat,
+           defaultLong
+         // BlocProvider.of<HomeCubit>(context).locationData?.latitude??defaultLat
+         // , BlocProvider.of<HomeCubit>(context).locationData?.longitude??defaultLong
+       ),
+       tilt: 59.440717697143555,
+       zoom: 19.151926040649414);
+ }
+
+  late CameraPosition kGooglePlex ;
+
+
+  kGooglePlexInitialized( ) {
+    kGooglePlex = CameraPosition(
+   target: LatLng(
+
+   defaultLat ,
+   defaultLong
+   // BlocProvider.of<HomeCubit>(context).locationData?.latitude??defaultLat
+   // , BlocProvider.of<HomeCubit>(context).locationData?.longitude??defaultLong
+
+   ),
+   zoom: 14.4746,
+   );
+ }
+// to Change  Camera to lake
+
+  Future<void> goToTheLake(
+      Completer<GoogleMapController> controller_
+      ) async {
+    final GoogleMapController controller = await controller_.future;
+
+      await controller.animateCamera(CameraUpdate.newCameraPosition(kLake));
+
+  }
+
+  //  to change camera whhen change location
+   Future<void> changeCameraToUser (
+      Completer<GoogleMapController> controller_
+      ) async {
+    final GoogleMapController controller = await controller_.future;
+
+      await controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+              bearing: 192.8334901395799,
+              target: LatLng(
+                  defaultLat,
+                  defaultLong
+                // BlocProvider.of<HomeCubit>(context).locationData?.latitude??defaultLat
+                // , BlocProvider.of<HomeCubit>(context).locationData?.longitude??defaultLong
+              ),
+              tilt: 59.440717697143555,
+              zoom: 19.151926040649414)
+
+      ));
+
+  }
+
+
+
   // dispose
   stopLocationListener( ) {
     locationListener?.cancel();
   }
+
 
 }

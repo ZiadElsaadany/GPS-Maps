@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../view_model/home_cubit/home_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,36 +19,49 @@ class _HomeScreenState extends State<HomeScreen> {
   final Completer<GoogleMapController> _controller =
   Completer<GoogleMapController>();
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.4219983, -122.084 ),
-    zoom: 14.4746,
-  );
 
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+
+  Set<Marker> markers=  { };
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<HomeCubit>(context).getUserLocation();
+    BlocProvider.of<HomeCubit>(context).kGooglePlexInitialized();
+    BlocProvider.of<HomeCubit>(context).kLakeInitialized();
+    BlocProvider.of<HomeCubit>(context).updateUserMarker();
+
+
+
+
+
+
+
+   markers.add( BlocProvider.of<HomeCubit>(context).userMarker);
+  }
   @override
   Widget build(BuildContext context) {
+    var cubit = BlocProvider.of<HomeCubit>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+      ),
       body: GoogleMap(
+        markers: markers,
         mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: cubit.kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
+        onPressed: ( ) {
+          cubit.goToTheLake(_controller);
+        },
         label: const Text('To the lake!'),
         icon: const Icon(Icons.directions_boat),
       ),
     );
   }
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+
 }
