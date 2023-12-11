@@ -2,12 +2,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gps/home/presentation/view/home_screen.dart';
 import 'package:gps/home/presentation/view_model/home_cubit/home_cubit.dart';
 import 'package:location/location.dart';
 
 void main() {
-  runApp( GPS());
+  // if(defaultTargetPlatform==TargetPlatform.android) {
+  //   AndroidGoogleMapsFlutter.useAndroidViewSurface=true;
+  // }
+  runApp( MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (c)=>HomeCubit())
+      ],
+      child: GPS()));
 }
 
 class GPS extends StatefulWidget {
